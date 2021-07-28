@@ -98,3 +98,19 @@ describe("fail()", function () {
   //   it.todo("throws error if argument is not an object");
   //   it.todo("throws error if argument is missing required properties");
 });
+
+describe("get()", function () {
+  it("modifies name according to the spec", () => {
+    const itemX = { name: "sword", durability: 14, enhancement: 3 };
+    const itemY = { name: "sword", durability: 14, enhancement: 0 };
+
+    const resultX = enhancer.get(itemX);
+    const resultY = enhancer.get(itemY);
+
+    expect(resultX).toEqual({ ...itemX, name: `[+3] sword` });
+    expect(resultY).toEqual({ ...itemY });
+  });
+
+  //   it.todo("throws error if argument is not an object");
+  //   it.todo("throws error if argument is missing required properties");
+});
