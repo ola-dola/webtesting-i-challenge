@@ -12,6 +12,9 @@ describe("repair()", function () {
   it("doesn't change/add other properties", () => {
     expect(repairedItem).toEqual({ ...damagedItem, durability: 100 });
   });
+
+  it.todo("throws error if argument is not an object");
+  it.todo("throws error if argument is missing required properties");
 });
 
 describe("success()", function () {
@@ -38,5 +41,60 @@ describe("success()", function () {
     const result = enhancer.success(itemY);
 
     expect(result.enhancement).toBe(20);
-  })
+  });
+
+  it.todo("throws error if argument is not an object");
+  it.todo("throws error if argument is missing required properties");
+});
+
+describe("fail()", function () {
+  const item = { name: "sword", durability: 14, enhancement: 19 };
+  const result = enhancer.fail(item);
+
+  it("doesn't add new properties", () => {
+    expect(result).toEqual({ ...item, durability: 9, enhancement: 18 });
+  });
+
+  it("handles enhancement above 16 correctly", () => {
+    expect(result.enhancement).toBe(18);
+  });
+
+  it("handles enhancement values 16 and below correctly", () => {
+    const itemA = { ...item, enhancement: 16 };
+    const itemB = { ...item, enhancement: 9 };
+
+    const resultA = enhancer.fail(itemA);
+    const resultB = enhancer.fail(itemB);
+
+    expect(resultA.enhancement).toBe(16);
+    expect(resultB.enhancement).toBe(9);
+  });
+
+  it("handles durability below 15 correctly", () => {
+    expect(result.durability).toBe(9);
+  });
+
+  it("handles durability values 15 and above correctly", () => {
+    // Arrange
+    const itemX = { ...item, durability: 15 };
+    const itemY = { ...item, durability: 47 };
+
+    // Act
+    const resultX = enhancer.fail(itemX);
+    const resultY = enhancer.fail(itemY);
+
+    // Assert
+    expect(resultX.durability).toBe(5);
+    expect(resultY.durability).toBe(37);
+  });
+
+  it("keeps durability minimum value at 0", () => {
+    const itemX = { ...item, durability: 3 };
+    const result = enhancer.fail(itemX);
+
+    expect(result.durability).toBe(0);
+  });
+
+  //   it.todo("throws error if argument is not an object");
+  //   it.todo("throws error if argument is missing required properties");
 });
